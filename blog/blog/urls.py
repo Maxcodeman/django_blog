@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
+from django.urls import path,include
 #导入系统的logging
 import logging
 #创建(获取)日志器
@@ -31,5 +32,8 @@ def log(request):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('',log)
+    path('',log),
+    #include 参数1要设置为元组(urlconf_module,app_name)
+    #namespace 设置命名空间
+    path('',include(('users.urls','users'),namespace='users'))
 ]
