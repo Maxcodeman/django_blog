@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = "django-insecure-n%t2qt%!pxu76&l!egucbk5=%76kvaarmwfz&zpnfk2-z4n+uq
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -55,7 +53,7 @@ ROOT_URLCONF = "blog.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR,"templates")],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -70,21 +68,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "blog.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "HOST":"127.0.0.1",
-        "PORT":"3306",
-        "USER":"itheima",
-        "PASSWORD":"123456",
-        "NAME":"django_blog",
+        "HOST": "127.0.0.1",
+        "PORT": "3306",
+        "USER": "itheima",
+        "PASSWORD": "123456",
+        "NAME": "django_blog",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -104,7 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -115,7 +110,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -129,28 +123,28 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-#Redis数据库的配置
-CACHES={
-    "default":{#默认
-        "BACKEND":"django_redis.cache.RedisCache",
-        "LOCATION":"redis://127.0.0.1:6379/0",
-        "OPTIONS":{
-        "CLIENT_CLASS":"django_redis.client.DefaultClient",
-    }
-},
-    "session":{#session
-        "BACKEND":"django_redis.cache.RedisCache",
-        "LOCATION":"redis://127.0.0.1;6379/1",
-        "OPTIONS":{
-            "CLIENT_CLASS":"django_redis.client.DefaultClient",
+# Redis数据库的配置
+CACHES = {
+    "default": {  # 默认
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "session": {  # session
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1;6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
 }
-#session由数据库存储改为redis存储
-SESSION_ENGINE="django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS="session"
+# session由数据库存储改为redis存储
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "session"
 
-#配置工程日志
+# 配置工程日志
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
@@ -191,3 +185,5 @@ LOGGING = {
         },
     }
 }
+
+AUTH_USER_MODEL = "users.User"

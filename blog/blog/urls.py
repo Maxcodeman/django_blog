@@ -15,7 +15,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
 from django.http import HttpResponse
 from django.urls import path,include
 #导入系统的logging
@@ -25,7 +24,7 @@ logger = logging.getLogger('django')
 
 
 def log(request):
-    logger.info('测试logging模块info')
+    # logger.info('测试logging模块info')
     # logger.debug('测试logging模块debug')
     # logger.error('测试logging模块error')
     return HttpResponse('test')
