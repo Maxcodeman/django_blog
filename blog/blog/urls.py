@@ -31,8 +31,9 @@ def log(request):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('',log),
+    # path('',log),
     #include 参数1要设置为元组(urlconf_module,app_name)
     #namespace 设置命名空间
-    path('',include(('users.urls','users'),namespace='users'))
+    path('',include(('users.urls','users'),namespace='users')),
+    path('',include(('home.urls','home'),namespace='home'))
 ]
