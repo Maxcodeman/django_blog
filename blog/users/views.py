@@ -1,9 +1,10 @@
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django_redis import get_redis_connection
-
+from django.urls import reverse
 from libs.captcha.captcha import captcha
 import re
 from users.models import User
@@ -167,10 +168,14 @@ class LoginView(View):
 
         #实现状态保持
         login(request,user)
-
-        #响应登录结果
+        next = request.GET.get('next')
         from django.urls import reverse
-        response=redirect(reverse('home:index'))
+        #响应登录结果
+        if next:
+            response = redirect(next)
+        else:
+            response = redirect(reverse('home:index'))
+        # response=redirect(reverse('home:index'))
 
     #设置状态保持的周期
         if remember!='on':
@@ -255,4 +260,40 @@ class ForgetPasswordView(View):
 
         return response
 
+class UserCenterView(LoginRequiredMixin,View):
+    def get(self,request):
+        #获取用户信息
+        user=request.user
+        #组织模版渲染数据
+        context={
+            'username':user.username,
+            'mobile':user.mobile,
+            'avatar':user.avatar.url if user.avatar else None,
+            'user_desc':user.user_desc
+        }
 
+        return render(request,"center.html",context=context)
+
+    def post(self,request):
+        #接收数据
+        user=request.user
+        avatar=request.FILES.get('avatar')
+        username=request.POST.get('username',user.username)
+        user_desc=request.POST.get('desc',user.user_desc)
+
+        #修改数据库数据
+        try:
+            user.username=username
+            user.user_desc=user_desc
+            if avatar:
+                user.avatar=avatar
+            user.save()
+        except Exception as e:
+            logger.error(e)
+            return HttpResponseBadRequest('更新失败,请稍后再试')
+
+        #返回响应,刷新页面
+        response=redirect(reverse('users:center'))
+        #更新cookie信息
+        response.set_cookie('username',user.username,max_age=14*24*3000)
+        return response

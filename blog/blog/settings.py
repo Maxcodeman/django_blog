@@ -187,3 +187,12 @@ LOGGING = {
 }
 
 AUTH_USER_MODEL = "users.User"
+
+#设置未登录用户跳转的路由
+LOGIN_URL='/login/'
+
+#设置图片上传路径
+MEDIA_ROOT=os.path.join(BASE_DIR,'media/')
+
+#图片的统一路由
+MEDIA_URL="/media/"
