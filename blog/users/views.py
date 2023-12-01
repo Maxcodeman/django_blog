@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django_redis import get_redis_connection
 from django.urls import reverse
+
+from home.models import ArticleCategory, Article
 from libs.captcha.captcha import captcha
 import re
 from users.models import User
@@ -297,3 +299,53 @@ class UserCenterView(LoginRequiredMixin,View):
         #更新cookie信息
         response.set_cookie('username',user.username,max_age=14*24*3000)
         return response
+
+class WriteBlogView(LoginRequiredMixin,View):
+    def get(self,request):
+        #获取博客分类信息
+        categories=ArticleCategory.objects.all()
+
+        context={
+            "categories":categories
+        }
+
+        return render(request,"write_blog.html",context=context)
+
+    def post(self,request):
+        #接收参数
+        title=request.POST.get('title')
+        avatar=request.FILES.get('avatar')
+        category_id=request.POST.get('category')
+        tags=request.POST.get('tags')
+        summary=request.POST.get('summary')
+        content=request.POST.get('content')
+        user=request.user
+
+        #验证数据是否齐全
+        if not all([avatar,title,category_id,tags,summary,content]):
+            return HttpResponseBadRequest('参数不全')
+
+        #判断文章分类id数据是否正确
+        try:
+            article_category=ArticleCategory.objects.get(id=category_id)
+        except ArticleCategory.DoesNotExist:
+            return HttpResponseBadRequest('没有此分类信息')
+
+        #增加文章信息
+        try:
+            article=Article.objects.create(
+                author=user,
+                avatar=avatar,
+                category=article_category,
+                tags=tags,
+                title=title,
+                summary=summary,
+                content=content
+            )
+        except Exception as e:
+            logger.error(e)
+            return HttpResponseBadRequest("发布失败,请稍后再试")
+
+        #返回响应,跳转到文章详情页面
+        #暂时先跳转到首页
+        return redirect(reverse("home:index"))

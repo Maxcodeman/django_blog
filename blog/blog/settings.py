@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users.apps.UsersConfig"
+    "users.apps.UsersConfig",
+    "home.apps.HomeConfig"
 ]
 
 MIDDLEWARE = [
@@ -196,3 +197,7 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'media/')
 
 #图片的统一路由
 MEDIA_URL="/media/"
+
+LANGUAGE_CODE='zh-Hans'
+
+TIME_ZONE='Asia/Shanghai'
