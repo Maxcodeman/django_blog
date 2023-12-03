@@ -54,8 +54,8 @@
         <div class="col-12">
             <br>
             <!-- 提交文章的表单 -->
-            {% csrf_token %}
             <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
                 <!-- 文章标题图 -->
                 <div class="form-group">
                     <label for="avatar">标题图</label>
